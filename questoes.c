@@ -14,7 +14,6 @@ void insere(struct TNo **lista, float x);
 
 
 
-a
 
 
 // Questão 6 
@@ -342,26 +341,32 @@ void altere(struct TNo **l) {
 // Questão 16 - Iterativa
 void separa_pares_de_impares(struct TNo **lista1, struct TNo **lista2) {
 
-	struct TNo *ant, *p, *novo, *lixo;
+	struct TNo *ant, *p, *f, *novo, *lixo;
 
 	ant = NULL;
 	p = *lista1;
+	f = *lista2;
 
 	while (p != NULL) {
 		if (p->info % 2 != 0) {
 			novo = (struct TNo*)malloc(sizeof(struct TNo));
 			if (novo != NULL) {
-			novo->info = p->info;
-			novo->prox = *lista2;
-			*lista2 = novo;
-			lixo = p;
-			if (ant == NULL) {
-				*lista1 = p->prox;
-			} else {
-				ant->prox = p->prox;
-			}
-			p = p->prox;
-			free(lixo);
+				novo->info = p->info;
+				novo->prox = NULL;
+				if (f == NULL) {
+					*lista2 = novo;
+				} else {
+					f->prox = novo;
+				}
+				lixo = p;
+				if (ant == NULL) {
+					*lista1 = p->prox;
+				} else {
+					ant->prox = p->prox;
+				}
+				p = p->prox;
+				f = novo;
+				free(lixo);
 			}
 		} else {
 			ant = p;
@@ -372,6 +377,22 @@ void separa_pares_de_impares(struct TNo **lista1, struct TNo **lista2) {
 	escreve_lista(*lista2);
 }
 
+
+// Questão 2 - Prova Drive
+void inverte_lista(struct TNo **l) {
+	if (*l != NULL) {
+		struct TNo *anterior, *atual, *proximo;
+		anterior = NULL;
+		atual = *l;
+		while (atual != NULL) {
+			proximo = atual->prox;
+			atual->prox = anterior;
+			anterior = atual;
+			atual = proximo;
+		}
+		*l = anterior;
+	}
+}
 
 int main() {
 	struct TNo *lista = NULL;
@@ -385,7 +406,9 @@ int main() {
 	insere_ordenado_recursivo(&lista, 10);
 	insere_ordenado_recursivo(&lista, 1);
 
+
 	separa_pares_de_impares(&lista, &lista2);
+
 
 	destroi(&lista);
 
@@ -397,10 +420,10 @@ int main() {
 // 14 - Recursiva; 15; 16 - Recursiva;
 
 // Faltam - Prova Passada:
-// 3;
+//
 
 // Faltam - Prova Drive:
-// 2; 4
+// 4;
 
 // Arrumar:
-//
+// (testar a de inverter e de separar impar e par)
