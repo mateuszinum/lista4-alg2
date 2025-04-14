@@ -14,7 +14,7 @@ void insere(struct TNo **lista, float x);
 
 
 
-
+a
 
 
 // Questão 6 
