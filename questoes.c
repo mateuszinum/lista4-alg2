@@ -378,6 +378,9 @@ void separa_pares_de_impares(struct TNo **lista1, struct TNo **lista2) {
 }
 
 
+
+
+
 // Questão 2 - Prova Drive
 void inverte_lista(struct TNo **l) {
 	if (*l != NULL) {
@@ -394,10 +397,85 @@ void inverte_lista(struct TNo **l) {
 	}
 }
 
+
+// Questão 14 - Recursiva
+bool soma_posicao(struct TNo **l, int p) {
+	
+	bool procura_posicao(struct TNo **n, int pos) {
+		struct TNo *proximo;
+		if (*n == NULL) {
+			return false;
+		}
+		if (pos == p && (*n)->prox != NULL) {
+			proximo = (*n)->prox;
+			proximo->info = (*n)->info + proximo->info;
+			return true;
+		}
+		procura_posicao(&(*n)->prox, pos + 1);
+	}
+
+	if (*l == NULL || (*l)->prox == NULL || p <= 0) {
+		return false;
+	}
+	procura_posicao(&(*l), 1);
+
+} 
+
+
+// Questão 11 - Recursiva - Arthur
+bool remove_ultimo_arthur(struct TNo **lista) {
+	if (*lista == NULL) {
+		return false;
+	}
+	if ((*lista)->prox == NULL) {
+		free(*lista);
+		*lista = NULL;
+		return true;
+	}
+	return remove_ultimo_arthur(&(*lista)->prox);
+}
+
+
+bool par_impar_guilherme(struct TNo **par, struct TNo **impar, struct TNo *l) {
+	
+	struct TNo *p, *i;
+
+	void insere() {
+		*par = (struct TNo*)malloc(sizeof(struct TNo));
+		*impar = (struct TNo*)malloc(sizeof(struct TNo));
+		p = *par;
+		i = *impar;
+		while (l != NULL) {
+			if (l->info % 2 == 0) {
+				if (p != NULL) {
+					p->info = l->info;
+					p->prox = NULL;
+					p = p->prox;
+					p = (struct TNo*)malloc(sizeof(struct TNo));
+				}
+			} else {
+				if (i != NULL) {
+					i->info = l->info;
+					i->prox = NULL;
+					i = i->prox;
+					i = (struct TNo*)malloc(sizeof(struct TNo));
+				}
+			}
+			l = l->prox;
+		}
+	}
+	if (l != NULL && *par == NULL && *impar == NULL) {
+		insere();
+	}
+}
+
+
 int main() {
 	struct TNo *lista = NULL;
 	struct TNo *lista2 = NULL;
 	
+	struct TNo *impar = NULL;
+	struct TNo *par = NULL;
 	
 	insere_ordenado_recursivo(&lista, 5);
 	insere_ordenado_recursivo(&lista, 3);
@@ -406,9 +484,11 @@ int main() {
 	insere_ordenado_recursivo(&lista, 10);
 	insere_ordenado_recursivo(&lista, 1);
 
+	escreve_lista(lista);
+	par_impar_guilherme(&par, &impar, lista); 
 
-	separa_pares_de_impares(&lista, &lista2);
-
+	escreve_lista(par);
+	escreve_lista(impar);
 
 	destroi(&lista);
 
@@ -417,7 +497,7 @@ int main() {
 }
 
 // Faltam:
-// 14 - Recursiva; 15; 16 - Recursiva;
+// 15; 16 - Recursiva;
 
 // Faltam - Prova Passada:
 //
@@ -426,4 +506,4 @@ int main() {
 // 4;
 
 // Arrumar:
-// (testar a de inverter e de separar impar e par)
+// (testar a de inverter, a de separar impar e par, a 14-recursiva)
